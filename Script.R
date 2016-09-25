@@ -38,3 +38,18 @@ bmi$percentage <- as.numeric(bmi$percentage)
 #Remove NA's
 bmi <- drop_na(bmi)
 
+#Grouping by age, after removing country column, so we can analize in genera perspective. 
+# The table with the country column will allow to analyze for each individual country if needed
+bmi_tot_age <- bmi %>%
+ select(bmi:age,edu_level:percentage)
+ group_by(age, bmi, edu_level, sex)  %>%
+ summarise(percentage_tot = mean(percentage)) %>%
+ arrange(age)
+ 
+#ggplot(bmi_tot_age, aes(x = age, y = percentage_tot, col = edu_level)) + geom_point()
+
+
+
+
+
+
