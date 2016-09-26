@@ -41,12 +41,32 @@ bmi <- drop_na(bmi)
 #Grouping by age, after removing country column, so we can analize in genera perspective. 
 # The table with the country column will allow to analyze for each individual country if needed
 bmi_tot_age <- bmi %>%
- select(bmi:age,edu_level:percentage)
+ select(bmi:age,edu_level:percentage) %>%
  group_by(age, bmi, edu_level, sex)  %>%
  summarise(percentage_tot = mean(percentage)) %>%
  arrange(age)
  
-#ggplot(bmi_tot_age, aes(x = age, y = percentage_tot, col = edu_level)) + geom_point()
+
+#Subsetting for TOTAL in variable sex
+ 
+bmi_tot_age_sex <- subset(bmi_tot_age, sex == 'Total')
+
+ggplot(bmi_tot_age_sex, aes(x = age, y = percentage_tot, col = edu_level)) + geom_point() + facet_grid(. ~ bmi)
+
+#It is very difficult to understand the plot, so we'll subset per bmi level and analyse individually
+
+bmi_tot_age_und <- subset(bmi_tot_age_sex, bmi == 'Underweight')
+bmi_tot_age_normal <- subset(bmi_tot_age_sex, bmi == 'Normal')
+bmi_tot_age_over <- subset(bmi_tot_age_sex, bmi == 'Overweight')
+bmi_tot_age_obese <- subset(bmi_tot_age_sex, bmi == 'Obese')
+
+ggplot(bmi_tot_age_und, aes(x = age, y = percentage_tot, col = edu_level)) + geom_point()
+ggplot(bmi_tot_age_normal, aes(x = age, y = percentage_tot, col = edu_level)) + geom_point()
+ggplot(bmi_tot_age_over, aes(x = age, y = percentage_tot, col = edu_level)) + geom_point()
+ggplot(bmi_tot_age_obese, aes(x = age, y = percentage_tot, col = edu_level)) + geom_point()
+
+
+
 
 
 
